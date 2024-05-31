@@ -1,0 +1,135 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "plugins": ["simple-import-sort", "import", "react", "jsx-a11y", "compat", "prettier"],
+  "extends": [
+    "plugin:import/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:compat/recommended",
+    "plugin:prettier/recommended",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "rules": {
+    "camelcase": "off",
+    "import/extensions": "off",
+    "import/named": "off",
+    "import/namespace": ["error", { "allowComputed": true }],
+    "import/prefer-default-export": "off",
+    "linebreak-style": "off",
+    "no-console": "error",
+    "no-empty": ["error", { "allowEmptyCatch": true }],
+    "no-empty-function": "error",
+    "no-nested-ternary": "error",
+    "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["state"] }],
+    "no-shadow": "off",
+    "no-use-before-define": "off",
+    "padding-line-between-statements": [
+      "error",
+      { "blankLine": "always", "prev": "*", "next": ["block-like", "return"] },
+      { "blankLine": "always", "prev": ["case"], "next": "*" },
+      { "blankLine": "always", "prev": ["const", "let", "var"], "next": "*" },
+      { "blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"] }
+    ],
+    "prettier/prettier": ["error"],
+    "react/function-component-definition": ["error", { "namedComponents": "arrow-function" }],
+    "react/jsx-filename-extension": ["error", { "extensions": [".ts", ".tsx"] }],
+    "react/jsx-no-bind": ["error", { "allowArrowFunctions": true }],
+    "react/jsx-no-useless-fragment": ["error", { "allowExpressions": true }],
+    "react/jsx-pascal-case": "error",
+    "react/jsx-props-no-spreading": "off",
+    "react/no-children-prop": "error",
+    "react/no-danger-with-children": "error",
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/require-default-props": "off",
+    "react/self-closing-comp": "error",
+    "simple-import-sort/exports": "error",
+    "simple-import-sort/imports": "error"
+  },
+  "overrides": [
+    {
+      "files": "*.spec.*",
+      "env": {
+        "cypress/globals": true
+      },
+      "plugins": ["cypress"],
+      "extends": ["plugin:cypress/recommended"]
+    },
+    {
+      "files": "*.test.*",
+      "plugins": ["vitest"],
+      "extends": ["plugin:vitest/recommended"]
+    },
+    {
+      "files": ["*.ts", "*.tsx"],
+      "plugins": ["@typescript-eslint"],
+      "extends": ["plugin:@typescript-eslint/eslint-recommended", "plugin:@typescript-eslint/recommended"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": ["./tsconfig.json"]
+      },
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }],
+        "@typescript-eslint/naming-convention": [
+          "warn",
+          {
+            "selector": "typeLike",
+            "format": ["StrictPascalCase"]
+          },
+          {
+            "selector": ["variableLike"],
+            "format": ["strictCamelCase"]
+          },
+          {
+            "selector": "variable",
+            "types": ["boolean"],
+            "format": ["StrictPascalCase"],
+            "prefix": ["is", "are", "should", "has", "can", "did", "will"]
+          },
+          {
+            "selector": "variable",
+            "modifiers": ["const"],
+            "format": ["strictCamelCase", "StrictPascalCase", "UPPER_CASE"]
+          },
+          {
+            "selector": "variable",
+            "modifiers": ["const"],
+            "types": ["function"],
+            "format": ["strictCamelCase", "StrictPascalCase", "UPPER_CASE"]
+          },
+          {
+            "selector": "interface",
+            "format": ["PascalCase"],
+            "custom": {
+              "regex": "^(?!I[A-Z])[a-zA-Z][a-zA-Z0-9]*(?<!Interface)$",
+              "match": true
+            }
+          }
+        ],
+        "@typescript-eslint/no-use-before-define": "error"
+      }
+    }
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/resolver": {
+      "typescript": {
+        "project": ["tsconfig.json"]
+      }
+    }
+  }
+}
