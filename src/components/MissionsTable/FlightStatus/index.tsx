@@ -8,7 +8,7 @@ interface FlightStatusProps {
 }
 
 const FlightStatus: React.FC<FlightStatusProps> = ({ departureDate: depDate }) => {
-  const [status, setStatus] = useState<string>('');
+  const [status, setStatus] = useState('');
 
   useEffect(() => {
     const updateStatus = (): void => {

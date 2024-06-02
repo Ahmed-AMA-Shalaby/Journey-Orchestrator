@@ -1,5 +1,6 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { DatePicker, pickersCalendarHeaderClasses } from '@mui/x-date-pickers';
+import { useState } from 'react';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 
 import destinations from '@/assets/Destinations.json';
@@ -13,6 +14,16 @@ interface MissionDetailsStepProps {
 }
 
 const MissionDetailsStep: React.FC<MissionDetailsStepProps> = ({ control, errors, activeStep, stepBack }) => {
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
+  const openDatePicker = (): void => {
+    setIsDatePickerOpen(true);
+  };
+
+  const closeDatePicker = (): void => {
+    setIsDatePickerOpen(false);
+  };
+
   return (
     <Box>
       <Controller
@@ -58,6 +69,9 @@ const MissionDetailsStep: React.FC<MissionDetailsStepProps> = ({ control, errors
         render={({ field }) => (
           <DatePicker
             {...field}
+            open={isDatePickerOpen}
+            onOpen={openDatePicker}
+            onClose={closeDatePicker}
             label='Departure Date'
             slotProps={{
               textField: {
@@ -65,6 +79,7 @@ const MissionDetailsStep: React.FC<MissionDetailsStepProps> = ({ control, errors
                 margin: 'normal',
                 error: !!errors.departureDate,
                 helperText: errors.departureDate?.message,
+                onClick: openDatePicker,
               },
               field: { clearable: true, format: 'MMMM DD, YYYY' },
               calendarHeader: {
