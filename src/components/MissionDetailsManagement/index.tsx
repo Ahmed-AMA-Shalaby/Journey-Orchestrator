@@ -12,6 +12,7 @@ import { CrewMemberType } from '@/models/types/crewMemberType.type';
 import { Mission } from '@/models/types/mission.type';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { missionActions } from '@/store/mission/MissionSlice';
+import { snackbarActions } from '@/store/snackbar/SnackbarSlice';
 
 const steps = ['Mission Details', 'Crew Details'];
 
@@ -30,7 +31,7 @@ const MissionDetailsManagement: React.FC = () => {
       engineers: [
         ...selectedMission.crewMembers
           .filter((crewMember) => crewMember.type === 'Engineer')
-          .map((engineer) => ({ job: `${engineer.job}`, experience: `${engineer.experience}` })),
+          .map((engineer) => ({ experience: `${engineer.experience}`, job: `${engineer.job}` })),
       ],
       passengers: [
         ...selectedMission.crewMembers
@@ -46,6 +47,7 @@ const MissionDetailsManagement: React.FC = () => {
     control,
     handleSubmit,
     reset,
+    getValues,
     formState: { errors },
   } = useForm<MissionForm>({
     mode: 'onTouched',
@@ -54,7 +56,7 @@ const MissionDetailsManagement: React.FC = () => {
       missionName: '',
       departureDate: null,
       pilotExperience: '',
-      engineers: [{ job: '', experience: '' }],
+      engineers: [{ experience: '', job: '' }],
       passengers: [{ age: '', wealth: '' }],
     },
   });
@@ -89,6 +91,7 @@ const MissionDetailsManagement: React.FC = () => {
       };
 
       dispatch(missionActions.upsertMission(mission));
+      dispatch(snackbarActions.showSnackbar(`Mission has been ${selectedMission ? 'updated' : 'created'}!`));
       navigate('/missions');
     } else {
       setActiveStep(activeStep + 1);
@@ -117,7 +120,9 @@ const MissionDetailsManagement: React.FC = () => {
                     <MissionDetailsStep control={control} errors={errors} activeStep={activeStep} stepBack={stepBack} />
                   )}
 
-                  {activeStep === 1 && <CrewDetailsStep control={control} errors={errors} stepBack={stepBack} />}
+                  {activeStep === 1 && (
+                    <CrewDetailsStep control={control} errors={errors} getValues={getValues} stepBack={stepBack} />
+                  )}
                 </form>
               </StepContent>
             )}
@@ -131,7 +136,9 @@ const MissionDetailsManagement: React.FC = () => {
             <MissionDetailsStep control={control} errors={errors} activeStep={activeStep} stepBack={stepBack} />
           )}
 
-          {activeStep === 1 && <CrewDetailsStep control={control} errors={errors} stepBack={stepBack} />}
+          {activeStep === 1 && (
+            <CrewDetailsStep control={control} errors={errors} getValues={getValues} stepBack={stepBack} />
+          )}
         </form>
       )}
     </Card>

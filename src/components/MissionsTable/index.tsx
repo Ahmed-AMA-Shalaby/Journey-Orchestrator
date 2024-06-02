@@ -1,4 +1,5 @@
 import ClearIcon from '@mui/icons-material/Clear';
+import InfoIcon from '@mui/icons-material/Info';
 import SettingsIcon from '@mui/icons-material/Settings';
 import {
   Box,
@@ -12,6 +13,8 @@ import {
   TableHead,
   TableRow,
   Tooltip,
+  TooltipProps,
+  Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
@@ -20,6 +23,20 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { missionActions } from '@/store/mission/MissionSlice';
+import { snackbarActions } from '@/store/snackbar/SnackbarSlice';
+
+const tooltipSlotProps = (yOffset: number): TooltipProps['slotProps'] => ({
+  popper: {
+    modifiers: [
+      {
+        name: 'offset',
+        options: {
+          offset: [0, yOffset],
+        },
+      },
+    ],
+  },
+});
 
 const MissionList: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -34,6 +51,7 @@ const MissionList: React.FC = () => {
 
   const deleteMission = (id: number): void => {
     dispatch(missionActions.deleteMission(id));
+    dispatch(snackbarActions.showSnackbar('Mission has been terminated!'));
   };
 
   return (
@@ -51,8 +69,35 @@ const MissionList: React.FC = () => {
         <TableBody>
           {missions.map(({ id, name, crewMembers, departureDate }) => (
             <TableRow key={id}>
-              <TableCell>{name}</TableCell>
-              <TableCell>{crewMembers.length}</TableCell>
+              <TableCell sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{name}</TableCell>
+              <TableCell>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  {crewMembers.length}
+                  <Tooltip
+                    title={
+                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                        <Typography>Crew Overview:</Typography>
+                        <Box>
+                          <Typography>
+                            Pilots: {crewMembers.filter((member) => member.type === 'Pilot').length}
+                          </Typography>
+                          <Typography>
+                            Engineers: {crewMembers.filter((member) => member.type === 'Engineer').length}
+                          </Typography>
+                          <Typography>
+                            Passengers: {crewMembers.filter((member) => member.type === 'Passenger').length}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    }
+                    placement='bottom'
+                    arrow
+                    slotProps={tooltipSlotProps(isLargeScreen ? -7 : -14)}
+                  >
+                    <InfoIcon color='info' fontSize='small' />
+                  </Tooltip>
+                </Box>
+              </TableCell>
               <TableCell>{dayjs(departureDate).format('MMMM DD, YYYY')}</TableCell>
               <TableCell>
                 <Box sx={{ display: 'flex', justifyContent: 'center', gap: { xs: 0, md: 2 } }}>
@@ -67,44 +112,12 @@ const MissionList: React.FC = () => {
                     </>
                   ) : (
                     <>
-                      <Tooltip
-                        title='Manage'
-                        placement='top'
-                        arrow
-                        slotProps={{
-                          popper: {
-                            modifiers: [
-                              {
-                                name: 'offset',
-                                options: {
-                                  offset: [0, -14],
-                                },
-                              },
-                            ],
-                          },
-                        }}
-                      >
+                      <Tooltip title='Manage' placement='top' arrow slotProps={tooltipSlotProps(-14)}>
                         <IconButton color='primary' onClick={() => navigateToMission(id)}>
                           <SettingsIcon />
                         </IconButton>
                       </Tooltip>
-                      <Tooltip
-                        title='Terminate'
-                        placement='top'
-                        arrow
-                        slotProps={{
-                          popper: {
-                            modifiers: [
-                              {
-                                name: 'offset',
-                                options: {
-                                  offset: [0, -14],
-                                },
-                              },
-                            ],
-                          },
-                        }}
-                      >
+                      <Tooltip title='Terminate' placement='top' arrow slotProps={tooltipSlotProps(-14)}>
                         <IconButton color='error' onClick={() => deleteMission(id)}>
                           <ClearIcon />
                         </IconButton>

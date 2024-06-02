@@ -4,6 +4,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Provider } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import AppSnackbar from '@/components/AppSnackbar';
 import store from '@/store';
 
 import AppRouter from './router';
@@ -26,6 +27,7 @@ const App: React.FC = () => {
               </Typography>
             </Box>
             <AppRouter />
+            <AppSnackbar />
           </LocalizationProvider>
         </Container>
       </ThemeProvider>

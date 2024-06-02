@@ -14,7 +14,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { Control, Controller, FieldErrors, useFieldArray } from 'react-hook-form';
+import { Control, Controller, FieldErrors, useFieldArray, UseFormGetValues } from 'react-hook-form';
 
 import engineerJobs from '@/assets/EngineerJobs.json';
 import { MissionForm } from '@/components/MissionDetailsManagement/schema';
@@ -23,10 +23,11 @@ import { useAppSelector } from '@/store/hooks';
 interface CrewDetailsStepProps {
   control: Control<MissionForm>;
   errors: FieldErrors<MissionForm>;
+  getValues: UseFormGetValues<MissionForm>;
   stepBack: () => void;
 }
 
-const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, stepBack }) => {
+const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, getValues, stepBack }) => {
   const {
     fields: engineerFields,
     append: appendEngineer,
@@ -87,25 +88,6 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, step
       {engineerFields.map((field, index) => (
         <Box key={field.id} sx={{ display: 'flex', gap: 2, mt: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
           <Controller
-            name={`engineers.${index}.job`}
-            control={control}
-            render={({ field }) => (
-              <FormControl fullWidth margin='none'>
-                <InputLabel>Job</InputLabel>
-                <Select {...field} label='Job' error={!!errors.engineers?.[index]?.job}>
-                  {engineerJobs.map((job) => (
-                    <MenuItem key={job} value={job}>
-                      {job}
-                    </MenuItem>
-                  ))}
-                </Select>
-                {errors.engineers?.[index]?.job && (
-                  <Typography color='error'>{errors.engineers?.[index]?.job?.message}</Typography>
-                )}
-              </FormControl>
-            )}
-          />
-          <Controller
             name={`engineers.${index}.experience`}
             control={control}
             render={({ field }) => (
@@ -124,6 +106,25 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, step
                 error={!!errors.engineers?.[index]?.experience}
                 helperText={errors.engineers?.[index]?.experience?.message}
               />
+            )}
+          />
+          <Controller
+            name={`engineers.${index}.job`}
+            control={control}
+            render={({ field }) => (
+              <FormControl fullWidth margin='none'>
+                <InputLabel>Job</InputLabel>
+                <Select {...field} label='Job' error={!!errors.engineers?.[index]?.job}>
+                  {engineerJobs.map((job) => (
+                    <MenuItem key={job} value={job}>
+                      {job}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors.engineers?.[index]?.job && (
+                  <Typography color='error'>{errors.engineers?.[index]?.job?.message}</Typography>
+                )}
+              </FormControl>
             )}
           />
           {isLargeScreen ? (
@@ -145,7 +146,7 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, step
       ))}
       <Button
         variant='contained'
-        onClick={() => appendEngineer({ job: '', experience: '' })}
+        onClick={() => appendEngineer({ experience: '', job: '' })}
         fullWidth={!isLargeScreen}
         startIcon={<AddCircle />}
         sx={{ mt: 2 }}
@@ -214,6 +215,11 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, step
           )}
         </Box>
       ))}
+      {getValues('passengers').length === 0 && errors.passengers && (
+        <Typography color='error' sx={{ fontSize: '0.75rem' }}>
+          {errors.passengers.message || errors.passengers.root?.message}
+        </Typography>
+      )}
       <Button
         variant='contained'
         onClick={() => appendPassenger({ age: '', wealth: '' })}

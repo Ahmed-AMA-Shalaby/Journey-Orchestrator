@@ -14,11 +14,11 @@ export const crewSchema = z.object({
   engineers: z
     .array(
       z.object({
-        job: z.enum(engineerJobs as [string, ...string[]], {
-          errorMap: () => ({ message: 'Invalid job' }),
-        }),
         experience: z.string().refine((data) => +data >= 0, {
           message: 'Experience must be a positive number',
+        }),
+        job: z.enum(engineerJobs as [string, ...string[]], {
+          errorMap: () => ({ message: 'Invalid job' }),
         }),
       }),
     )

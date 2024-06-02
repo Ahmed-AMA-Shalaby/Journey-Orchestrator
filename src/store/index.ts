@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import MissionReducer from './mission/MissionSlice';
+import SnackbarReducer from './snackbar/SnackbarSlice';
 
 const store = configureStore({
   reducer: {
     mission: MissionReducer,
+    snackbar: SnackbarReducer,
   },
 });
 
