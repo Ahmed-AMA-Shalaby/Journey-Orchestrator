@@ -7,7 +7,7 @@ import { snackbarActions } from '@/store/snackbar/SnackbarSlice';
 
 const AppSnackbar: React.FC = () => {
   const dispatch = useAppDispatch();
-  const message = useAppSelector((state) => state.snackbar.message);
+  const { isOpen, message } = useAppSelector((state) => state.snackbar);
 
   const close = (event?: SyntheticEvent | Event, reason?: string): void => {
     if (event && reason === 'clickaway') {
@@ -19,9 +19,9 @@ const AppSnackbar: React.FC = () => {
 
   return (
     <Snackbar
-      open={!!message}
+      open={isOpen}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      autoHideDuration={3000}
+      autoHideDuration={5000}
       onClose={close}
     >
       <Alert onClose={close} severity='success' variant='filled' sx={{ width: '100%' }}>

@@ -1,19 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type SnackbarState = {
+  isOpen: boolean;
   message?: string;
 };
 
-const initialState: SnackbarState = { message: undefined };
+const initialState: SnackbarState = { isOpen: false, message: undefined };
 
 const snackbarSlice = createSlice({
   name: 'snackbar',
   initialState,
   reducers: {
     hideSelectedSnackbar: (state) => {
-      state.message = initialState.message;
+      state.isOpen = initialState.isOpen;
     },
     showSnackbar: (state, { payload }: PayloadAction<string>) => {
+      state.isOpen = true;
       state.message = payload;
     },
   },

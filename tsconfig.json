@@ -26,7 +26,8 @@
       "@/models/*": ["models/*"],
       "@/store/*": ["store/*"],
       "@/store": ["store"],
-      "@/assets/*": ["assets/*"]
+      "@/assets/*": ["assets/*"],
+      "@/utils": ["utils"]
     }
   },
   "include": ["src", "vite-env.d.ts", "vite.config.ts"],

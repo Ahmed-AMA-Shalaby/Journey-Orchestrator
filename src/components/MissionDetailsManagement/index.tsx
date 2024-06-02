@@ -13,6 +13,7 @@ import { Mission } from '@/models/types/mission.type';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { missionActions } from '@/store/mission/MissionSlice';
 import { snackbarActions } from '@/store/snackbar/SnackbarSlice';
+import { hasDeparted } from '@/utils';
 
 const steps = ['Mission Details', 'Crew Details'];
 
@@ -65,9 +66,12 @@ const MissionDetailsManagement: React.FC = () => {
 
   useEffect(() => {
     if (selectedMission) {
+      if (hasDeparted(selectedMission.departureDate)) {
+        navigate('/missions');
+      }
       reset(initializeForm(selectedMission));
     }
-  }, [reset, selectedMission]);
+  }, [navigate, reset, selectedMission]);
 
   const onSubmit = (data: MissionForm): void => {
     if (activeStep === steps.length - 1) {

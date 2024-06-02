@@ -21,9 +21,11 @@ import {
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 
+import FlightStatus from '@/components/MissionsTable/FlightStatus';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { missionActions } from '@/store/mission/MissionSlice';
 import { snackbarActions } from '@/store/snackbar/SnackbarSlice';
+import { hasDeparted } from '@/utils';
 
 const tooltipSlotProps = (yOffset: number): TooltipProps['slotProps'] => ({
   popper: {
@@ -60,8 +62,11 @@ const MissionList: React.FC = () => {
         <TableHead>
           <TableRow>
             <TableCell>Name</TableCell>
+
             <TableCell>Members</TableCell>
-            <TableCell>Departure</TableCell>
+
+            <TableCell align='right'>Departure</TableCell>
+
             <TableCell align='center'>Actions</TableCell>
           </TableRow>
         </TableHead>
@@ -70,6 +75,7 @@ const MissionList: React.FC = () => {
           {missions.map(({ id, name, crewMembers, departureDate }) => (
             <TableRow key={id}>
               <TableCell sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{name}</TableCell>
+
               <TableCell>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   {crewMembers.length}
@@ -98,30 +104,49 @@ const MissionList: React.FC = () => {
                   </Tooltip>
                 </Box>
               </TableCell>
-              <TableCell>{dayjs(departureDate).format('MMMM DD, YYYY')}</TableCell>
+
+              <TableCell>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                  {dayjs(departureDate).format('MMMM DD, YYYY')}
+                  <Typography
+                    sx={{
+                      fontSize: '0.75rem',
+                      fontStyle: 'italic',
+                      color: `${hasDeparted(departureDate) ? 'red' : 'grey'}`,
+                    }}
+                  >
+                    <FlightStatus departureDate={departureDate} />
+                  </Typography>
+                </Box>
+              </TableCell>
+
               <TableCell>
                 <Box sx={{ display: 'flex', justifyContent: 'center', gap: { xs: 0, md: 2 } }}>
-                  {isLargeScreen ? (
+                  {!hasDeparted(departureDate) && (
                     <>
-                      <Button variant='contained' fullWidth onClick={() => navigateToMission(id)}>
-                        Manage
-                      </Button>
-                      <Button variant='contained' fullWidth color='error' onClick={() => deleteMission(id)}>
-                        Terminate
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      <Tooltip title='Manage' placement='top' arrow slotProps={tooltipSlotProps(-14)}>
-                        <IconButton color='primary' onClick={() => navigateToMission(id)}>
-                          <SettingsIcon />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title='Terminate' placement='top' arrow slotProps={tooltipSlotProps(-14)}>
-                        <IconButton color='error' onClick={() => deleteMission(id)}>
-                          <ClearIcon />
-                        </IconButton>
-                      </Tooltip>
+                      {isLargeScreen ? (
+                        <>
+                          <Button variant='contained' fullWidth onClick={() => navigateToMission(id)}>
+                            Manage
+                          </Button>
+                          <Button variant='contained' fullWidth color='error' onClick={() => deleteMission(id)}>
+                            Terminate
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Tooltip title='Manage' placement='top' arrow slotProps={tooltipSlotProps(-14)}>
+                            <IconButton color='primary' onClick={() => navigateToMission(id)}>
+                              <SettingsIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title='Terminate' placement='top' arrow slotProps={tooltipSlotProps(-14)}>
+                            <IconButton color='error' onClick={() => deleteMission(id)}>
+                              <ClearIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </>
+                      )}
                     </>
                   )}
                 </Box>
