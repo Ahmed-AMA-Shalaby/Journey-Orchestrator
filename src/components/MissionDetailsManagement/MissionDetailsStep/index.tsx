@@ -1,5 +1,5 @@
 import { Box, Button, TextField } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers';
+import { DatePicker, pickersCalendarHeaderClasses } from '@mui/x-date-pickers';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 
 import { MissionForm } from '@/components/MissionDetailsManagement/schema';
@@ -44,6 +44,19 @@ const MissionDetailsStep: React.FC<MissionDetailsStepProps> = ({ control, errors
                 helperText: errors.departureDate?.message,
               },
               field: { clearable: true, format: 'MMMM DD, YYYY' },
+              calendarHeader: {
+                sx: {
+                  [`.${pickersCalendarHeaderClasses.label}`]: {
+                    color: 'rgba(0, 0, 0, 0.87)',
+                  },
+                  [`.${pickersCalendarHeaderClasses.switchViewIcon}`]: {
+                    color: 'rgba(0, 0, 0, 0.87)',
+                  },
+                  [`.${pickersCalendarHeaderClasses.labelContainer}`]: {
+                    color: 'rgba(0, 0, 0, 0.87)',
+                  },
+                },
+              },
             }}
             onChange={(date) => field.onChange(date)}
           />

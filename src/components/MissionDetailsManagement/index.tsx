@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, Step, StepLabel, Stepper } from '@mui/material';
+import { Card, Step, StepContent, StepLabel, Stepper, useMediaQuery, useTheme } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -19,6 +19,8 @@ const MissionDetailsManagement: React.FC = () => {
   const dispatch = useAppDispatch();
   const selectedMission = useAppSelector((state) => state.mission.selectedMission);
   const [activeStep, setActiveStep] = useState(0);
+  const theme = useTheme();
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up('sm'));
 
   const initializeForm = (selectedMission: Mission): MissionForm => {
     return {
@@ -98,23 +100,41 @@ const MissionDetailsManagement: React.FC = () => {
   };
 
   return (
-    <Box>
-      <Stepper activeStep={activeStep} alternativeLabel sx={{ m: 2 }}>
+    <Card sx={{ p: 4, mb: 8 }}>
+      <Stepper
+        activeStep={activeStep}
+        sx={{ m: 2 }}
+        orientation={isLargeScreen ? 'horizontal' : 'vertical'}
+        alternativeLabel={isLargeScreen}
+      >
         {steps.map((label) => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
+            {!isLargeScreen && (
+              <StepContent>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  {activeStep === 0 && (
+                    <MissionDetailsStep control={control} errors={errors} activeStep={activeStep} stepBack={stepBack} />
+                  )}
+
+                  {activeStep === 1 && <CrewDetailsStep control={control} errors={errors} stepBack={stepBack} />}
+                </form>
+              </StepContent>
+            )}
           </Step>
         ))}
       </Stepper>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {activeStep === 0 && (
-          <MissionDetailsStep control={control} errors={errors} activeStep={activeStep} stepBack={stepBack} />
-        )}
+      {isLargeScreen && (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {activeStep === 0 && (
+            <MissionDetailsStep control={control} errors={errors} activeStep={activeStep} stepBack={stepBack} />
+          )}
 
-        {activeStep === 1 && <CrewDetailsStep control={control} errors={errors} stepBack={stepBack} />}
-      </form>
-    </Box>
+          {activeStep === 1 && <CrewDetailsStep control={control} errors={errors} stepBack={stepBack} />}
+        </form>
+      )}
+    </Card>
   );
 };
 

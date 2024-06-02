@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   FormControl,
+  FormLabel,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -10,6 +11,8 @@ import {
   Select,
   TextField,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { Control, Controller, FieldErrors, useFieldArray } from 'react-hook-form';
 
@@ -43,20 +46,24 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, step
   });
 
   const selectedMission = useAppSelector((state) => state.mission.selectedMission);
+  const theme = useTheme();
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up('sm'));
 
   return (
     <Box>
       {/* Pilot Section */}
-      <Typography variant='h6' gutterBottom>
-        Pilot
-      </Typography>
+      <FormLabel>
+        <Typography variant='h6' gutterBottom>
+          Pilot
+        </Typography>
+      </FormLabel>
       <Controller
         name='pilotExperience'
         control={control}
         render={({ field }) => (
           <TextField
             {...field}
-            label='Pilot Experience'
+            label='Experience'
             type='number'
             margin='normal'
             fullWidth
@@ -72,11 +79,13 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, step
       />
 
       {/* Engineers Section */}
-      <Typography variant='h6' gutterBottom sx={{ mt: 4 }}>
-        Engineers
-      </Typography>
+      <FormLabel>
+        <Typography variant='h6' gutterBottom sx={{ mt: 4 }}>
+          Engineers
+        </Typography>
+      </FormLabel>
       {engineerFields.map((field, index) => (
-        <Box key={field.id} sx={{ display: 'flex', gap: 2, mt: 2 }}>
+        <Box key={field.id} sx={{ display: 'flex', gap: 2, mt: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
           <Controller
             name={`engineers.${index}.job`}
             control={control}
@@ -117,14 +126,27 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, step
               />
             )}
           />
-          <IconButton onClick={() => removeEngineer(index)}>
-            <RemoveCircle />
-          </IconButton>
+          {isLargeScreen ? (
+            <IconButton color='error' onClick={() => removeEngineer(index)}>
+              <RemoveCircle />
+            </IconButton>
+          ) : (
+            <Button
+              variant='contained'
+              color='error'
+              onClick={() => removeEngineer(index)}
+              startIcon={<RemoveCircle />}
+              sx={{ mt: 2 }}
+            >
+              Remove Engineer
+            </Button>
+          )}
         </Box>
       ))}
       <Button
         variant='contained'
         onClick={() => appendEngineer({ job: '', experience: '' })}
+        fullWidth={!isLargeScreen}
         startIcon={<AddCircle />}
         sx={{ mt: 2 }}
       >
@@ -132,11 +154,13 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, step
       </Button>
 
       {/* Passengers Section */}
-      <Typography variant='h6' gutterBottom sx={{ mt: 4 }}>
-        Passengers
-      </Typography>
+      <FormLabel>
+        <Typography variant='h6' gutterBottom sx={{ mt: 4 }}>
+          Passengers
+        </Typography>
+      </FormLabel>
       {passengerFields.map((field, index) => (
-        <Box key={field.id} sx={{ display: 'flex', gap: 2, mt: 2 }}>
+        <Box key={field.id} sx={{ display: 'flex', gap: 2, mt: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
           <Controller
             name={`passengers.${index}.age`}
             control={control}
@@ -173,19 +197,33 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, step
               />
             )}
           />
-          <IconButton onClick={() => removePassenger(index)}>
-            <RemoveCircle />
-          </IconButton>
+          {isLargeScreen ? (
+            <IconButton color='error' onClick={() => removePassenger(index)}>
+              <RemoveCircle />
+            </IconButton>
+          ) : (
+            <Button
+              variant='contained'
+              color='error'
+              onClick={() => removePassenger(index)}
+              startIcon={<RemoveCircle />}
+              sx={{ mt: 2 }}
+            >
+              Remove Passenger
+            </Button>
+          )}
         </Box>
       ))}
       <Button
         variant='contained'
         onClick={() => appendPassenger({ age: '', wealth: '' })}
+        fullWidth={!isLargeScreen}
         startIcon={<AddCircle />}
         sx={{ mt: 2 }}
       >
         Add Passenger
       </Button>
+
       <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4, mt: 4 }}>
         <Button variant='contained' onClick={stepBack}>
           Prev

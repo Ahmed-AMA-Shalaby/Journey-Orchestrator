@@ -12,12 +12,19 @@ const MissionsListPage: React.FC = () => {
 
   return (
     <>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant='h4' sx={{ my: 5 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Typography variant='h4' sx={{ my: 5, color: 'white' }}>
           Missions Dashboard
         </Typography>
 
-        <Button variant='contained' onClick={navigateToMissionCreation}>
+        <Button variant='contained' onClick={navigateToMissionCreation} sx={{ mb: { xs: 3, sm: 0 } }}>
           Start Mission
         </Button>
       </Box>

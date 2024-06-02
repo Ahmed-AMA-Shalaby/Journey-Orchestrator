@@ -1,5 +1,5 @@
 import { ArrowBack } from '@mui/icons-material';
-import { Box, Button, Typography } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -26,18 +26,16 @@ const MissionManagmentPage: React.FC = () => {
   }, [dispatch, id]);
 
   return (
-    <Box>
-      <Button onClick={navigateToMisssions} sx={{ mt: 3 }}>
-        <ArrowBack sx={{ mr: 1 }} />
-        Back
-      </Button>
-
-      <Typography variant='h4' sx={{ mt: 2, mb: 5 }}>
+    <>
+      <Typography variant='h4' sx={{ display: 'flex', my: 5, color: 'white' }}>
+        <IconButton color='primary' onClick={navigateToMisssions}>
+          <ArrowBack sx={{ mr: 1 }} />
+        </IconButton>
         {selectedMission ? 'Configure Mission' : 'Initiate Mission'}
       </Typography>
 
       <MissionDetailsManagement />
-    </Box>
+    </>
   );
 };
 
