@@ -27,6 +27,7 @@ const MissionDetailsManagement: React.FC = () => {
   const initializeForm = (selectedMission: Mission): MissionForm => {
     return {
       missionName: selectedMission.name,
+      missionDestination: selectedMission.destination,
       departureDate: dayjs(selectedMission.departureDate),
       pilotExperience: `${selectedMission.crewMembers.find((crewMember) => crewMember.type === 'Pilot')?.experience}`,
       engineers: [
@@ -55,6 +56,7 @@ const MissionDetailsManagement: React.FC = () => {
     resolver: zodResolver(currentSchema),
     defaultValues: {
       missionName: '',
+      missionDestination: '',
       departureDate: null,
       pilotExperience: '',
       engineers: [{ experience: '', job: '' }],
@@ -78,6 +80,7 @@ const MissionDetailsManagement: React.FC = () => {
       const mission: Mission = {
         id: selectedMission?.id || Math.floor(Math.random() * 10000),
         name: data.missionName,
+        destination: data.missionDestination,
         departureDate: (data.departureDate || dayjs()).toISOString(),
         crewMembers: [
           { type: 'Pilot', experience: +data.pilotExperience },

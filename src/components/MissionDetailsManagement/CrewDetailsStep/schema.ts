@@ -18,7 +18,7 @@ export const crewSchema = z.object({
           message: 'Experience must be a positive number',
         }),
         job: z.enum(engineerJobs as [string, ...string[]], {
-          errorMap: () => ({ message: 'Invalid job' }),
+          errorMap: () => ({ message: `Engineer's job is required` }),
         }),
       }),
     )

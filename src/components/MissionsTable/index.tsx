@@ -63,6 +63,8 @@ const MissionList: React.FC = () => {
           <TableRow>
             <TableCell>Name</TableCell>
 
+            <TableCell>Destination</TableCell>
+
             <TableCell>Members</TableCell>
 
             <TableCell align='right'>Departure</TableCell>
@@ -72,9 +74,11 @@ const MissionList: React.FC = () => {
         </TableHead>
 
         <TableBody>
-          {missions.map(({ id, name, crewMembers, departureDate }) => (
+          {missions.map(({ id, name, destination, crewMembers, departureDate }) => (
             <TableRow key={id}>
               <TableCell sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{name}</TableCell>
+
+              <TableCell sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{destination}</TableCell>
 
               <TableCell>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

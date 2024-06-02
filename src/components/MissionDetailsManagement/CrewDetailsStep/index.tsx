@@ -122,7 +122,9 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, getV
                   ))}
                 </Select>
                 {errors.engineers?.[index]?.job && (
-                  <Typography color='error'>{errors.engineers?.[index]?.job?.message}</Typography>
+                  <Typography color='error' sx={{ fontSize: '0.75rem', mt: '3px', ml: '14px' }}>
+                    {errors.engineers?.[index]?.job?.message}
+                  </Typography>
                 )}
               </FormControl>
             )}
@@ -216,7 +218,7 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, getV
         </Box>
       ))}
       {getValues('passengers').length === 0 && errors.passengers && (
-        <Typography color='error' sx={{ fontSize: '0.75rem' }}>
+        <Typography color='error' sx={{ fontSize: '0.75rem', mt: '3px', ml: '14px' }}>
           {errors.passengers.message || errors.passengers.root?.message}
         </Typography>
       )}

@@ -1,7 +1,8 @@
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { DatePicker, pickersCalendarHeaderClasses } from '@mui/x-date-pickers';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 
+import destinations from '@/assets/Destinations.json';
 import { MissionForm } from '@/components/MissionDetailsManagement/schema';
 
 interface MissionDetailsStepProps {
@@ -26,6 +27,28 @@ const MissionDetailsStep: React.FC<MissionDetailsStepProps> = ({ control, errors
             error={!!errors.missionName}
             helperText={errors.missionName?.message}
           />
+        )}
+      />
+
+      <Controller
+        name={'missionDestination'}
+        control={control}
+        render={({ field }) => (
+          <FormControl fullWidth margin='none'>
+            <InputLabel>Destination</InputLabel>
+            <Select {...field} label='Destination' error={!!errors.missionDestination}>
+              {destinations.map((destination) => (
+                <MenuItem key={destination} value={destination}>
+                  {destination}
+                </MenuItem>
+              ))}
+            </Select>
+            {errors.missionDestination && (
+              <Typography color='error' sx={{ fontSize: '0.75rem', mt: '3px', ml: '14px' }}>
+                {errors.missionDestination.message}
+              </Typography>
+            )}
+          </FormControl>
         )}
       />
 
