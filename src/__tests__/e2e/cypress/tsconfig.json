@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "lib": ["dom", "dom.Iterable", "esnext"],
+    "types": ["cypress", "node", "@testing-library/cypress"],
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["../../e2e"]
+}

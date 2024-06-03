@@ -4,7 +4,11 @@
   "version": "0.0.0",
   "scripts": {
     "build": "tsc && vite build",
+    "cy:open": "cypress open --project src/__tests__/e2e",
+    "cy:run": "cypress run --project src/__tests__/e2e",
     "dev": "vite",
+    "e2e": "start-server-and-test dev http://localhost:5173 cy:open",
+    "e2e:headless": "start-server-and-test dev http://localhost:5173 cy:run",
     "format:fix": "prettier --write 'src/**/*.{ts,tsx,css}'",
     "lint": "eslint src/**/*.{ts,tsx} --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint src/**/*.{ts,tsx} --fix --report-unused-disable-directives --max-warnings 0",
@@ -37,6 +41,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@testing-library/cypress": "^10.0.2",
     "@testing-library/user-event": "^14.5.2",
     "@types/node": "^20.13.0",
     "@types/react": "^18.2.66",
@@ -45,6 +50,7 @@
     "@typescript-eslint/parser": "^7.11.0",
     "@vitejs/plugin-react": "^4.2.1",
     "@vitest/coverage-v8": "^1.6.0",
+    "cypress": "^13.10.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
@@ -61,6 +67,7 @@
     "husky": "^9.0.11",
     "lint-staged": "^15.2.5",
     "prettier": "^3.2.5",
+    "start-server-and-test": "^2.0.3",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
   }

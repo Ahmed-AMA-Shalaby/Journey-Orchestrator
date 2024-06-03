@@ -30,8 +30,11 @@ jobs:
     - name: Check code quality
       run: npm run lint:fix & npm run format:fix
 
-    - name: Run tests
+    - name: Run unit tests
       run: npm test
+
+    - name: Run accptance tests
+      run: npm run e2e:headless
 
     - name: Build project
       run: npm run build
