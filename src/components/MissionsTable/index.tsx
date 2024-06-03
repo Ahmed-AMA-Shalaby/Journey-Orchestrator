@@ -1,4 +1,5 @@
 import InfoIcon from '@mui/icons-material/Info';
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import SearchIcon from '@mui/icons-material/Search';
 import {
   Box,
@@ -55,7 +56,7 @@ const MissionList: React.FC = () => {
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
 
     const handleSearch = (): void => {
-      const filtered = missions.filter((mission) => mission.name.toLowerCase().startsWith(searchText.toLowerCase()));
+      const filtered = missions.filter((mission) => mission.name.toLowerCase().includes(searchText.toLowerCase()));
 
       setFilteredMissions(filtered);
     };
@@ -73,6 +74,10 @@ const MissionList: React.FC = () => {
     };
   }, [missions, searchText]);
 
+  const navigateToMissionCreation = (): void => {
+    navigate('/missions/new');
+  };
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchText(event.target.value);
   };
@@ -87,115 +92,138 @@ const MissionList: React.FC = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-      <Card sx={{ px: 2, py: 1 }}>
-        <TextField
-          label='Search by mission name'
-          value={searchText}
-          onChange={handleSearchChange}
-          variant='standard'
-          fullWidth
-          size='small'
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position='end'>
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Card>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5, mb: 8 }}>
+      {missions.length !== 0 ? (
+        <>
+          <Card sx={{ px: 2, py: 1 }}>
+            <TextField
+              label='Search by mission name'
+              value={searchText}
+              onChange={handleSearchChange}
+              variant='standard'
+              fullWidth
+              size='small'
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Card>
 
-      <Box sx={{ overflow: 'auto' }}>
-        <Box sx={{ width: '100%', display: 'table', tableLayout: 'fixed' }}>
-          <TableContainer component={Paper}>
-            <Table aria-label='missions-table'>
-              <TableHead sx={{ backgroundColor: 'white' }}>
-                <TableRow>
-                  <TableCell>Name</TableCell>
+          {filteredMissions.length !== 0 ? (
+            <Box sx={{ overflow: 'auto' }}>
+              <Box sx={{ width: '100%', display: 'table', tableLayout: 'fixed' }}>
+                <TableContainer component={Paper}>
+                  <Table aria-label='missions-table'>
+                    <TableHead sx={{ backgroundColor: 'white' }}>
+                      <TableRow>
+                        <TableCell>Name</TableCell>
 
-                  <TableCell>Destination</TableCell>
+                        <TableCell>Destination</TableCell>
 
-                  <TableCell>Members</TableCell>
+                        <TableCell>Members</TableCell>
 
-                  <TableCell align='right'>Departure</TableCell>
+                        <TableCell align='right'>Departure</TableCell>
 
-                  <TableCell align='center'>Actions</TableCell>
-                </TableRow>
-              </TableHead>
+                        <TableCell align='center'>Actions</TableCell>
+                      </TableRow>
+                    </TableHead>
 
-              <TableBody>
-                {filteredMissions.map(({ id, name, destination, crewMembers, departureDate }) => (
-                  <TableRow key={id}>
-                    <TableCell sx={{ textWrap: 'nowrap' }}>{name}</TableCell>
+                    <TableBody>
+                      {filteredMissions.map(({ id, name, destination, crewMembers, departureDate }) => (
+                        <TableRow key={id}>
+                          <TableCell sx={{ textWrap: 'nowrap' }}>{name}</TableCell>
 
-                    <TableCell sx={{ textWrap: 'nowrap' }}>{destination}</TableCell>
+                          <TableCell sx={{ textWrap: 'nowrap' }}>{destination}</TableCell>
 
-                    <TableCell>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        {crewMembers.length}
-                        <Tooltip
-                          title={
-                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                              <Typography>Crew Overview:</Typography>
-                              <Box>
-                                <Typography>
-                                  Pilots: {crewMembers.filter((member) => member.type === 'Pilot').length}
-                                </Typography>
-                                <Typography>
-                                  Engineers: {crewMembers.filter((member) => member.type === 'Engineer').length}
-                                </Typography>
-                                <Typography>
-                                  Passengers: {crewMembers.filter((member) => member.type === 'Passenger').length}
-                                </Typography>
-                              </Box>
+                          <TableCell>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              {crewMembers.length}
+                              <Tooltip
+                                title={
+                                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                    <Typography>Crew Overview:</Typography>
+                                    <Box>
+                                      <Typography>
+                                        Pilots: {crewMembers.filter((member) => member.type === 'Pilot').length}
+                                      </Typography>
+                                      <Typography>
+                                        Engineers: {crewMembers.filter((member) => member.type === 'Engineer').length}
+                                      </Typography>
+                                      <Typography>
+                                        Passengers: {crewMembers.filter((member) => member.type === 'Passenger').length}
+                                      </Typography>
+                                    </Box>
+                                  </Box>
+                                }
+                                placement='top'
+                                arrow
+                                slotProps={tooltipSlotProps(isLargeScreen ? -7 : -14)}
+                              >
+                                <InfoIcon color='info' fontSize='small' />
+                              </Tooltip>
                             </Box>
-                          }
-                          placement='bottom'
-                          arrow
-                          slotProps={tooltipSlotProps(isLargeScreen ? -7 : -14)}
-                        >
-                          <InfoIcon color='info' fontSize='small' />
-                        </Tooltip>
-                      </Box>
-                    </TableCell>
+                          </TableCell>
 
-                    <TableCell sx={{ textWrap: 'nowrap' }}>
-                      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                        {dayjs(departureDate).format('MMMM DD, YYYY')}
-                        <Typography
-                          sx={{
-                            fontSize: '0.75rem',
-                            fontStyle: 'italic',
-                            color: `${hasDeparted(departureDate) ? 'red' : 'grey'}`,
-                          }}
-                        >
-                          <FlightStatus departureDate={departureDate} />
-                        </Typography>
-                      </Box>
-                    </TableCell>
+                          <TableCell sx={{ textWrap: 'nowrap' }}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                              {dayjs(departureDate).format('MMMM DD, YYYY')}
+                              <Typography
+                                sx={{
+                                  fontSize: '0.75rem',
+                                  fontStyle: 'italic',
+                                  color: `${hasDeparted(departureDate) ? 'red' : 'grey'}`,
+                                }}
+                              >
+                                <FlightStatus departureDate={departureDate} />
+                              </Typography>
+                            </Box>
+                          </TableCell>
 
-                    <TableCell>
-                      <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4 }}>
-                        {!hasDeparted(departureDate) && (
-                          <>
-                            <Button variant='contained' fullWidth onClick={() => navigateToMission(id)}>
-                              Manage
-                            </Button>
-                            <Button variant='contained' fullWidth color='error' onClick={() => deleteMission(id)}>
-                              Terminate
-                            </Button>
-                          </>
-                        )}
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-      </Box>
+                          <TableCell>
+                            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4 }}>
+                              {!hasDeparted(departureDate) && (
+                                <>
+                                  <Button variant='contained' fullWidth onClick={() => navigateToMission(id)}>
+                                    Manage
+                                  </Button>
+                                  <Button variant='contained' fullWidth color='error' onClick={() => deleteMission(id)}>
+                                    Terminate
+                                  </Button>
+                                </>
+                              )}
+                            </Box>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
+            </Box>
+          ) : (
+            <Card sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: { xs: 4, sm: 10 } }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 3 }}>
+                <Typography color='grey'>{`Couldn't find the missions you're looking for...`}</Typography>
+                <Typography color='grey'>Try searching by another name!</Typography>
+              </Box>
+            </Card>
+          )}
+        </>
+      ) : (
+        <Card sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: { xs: 4, sm: 10 } }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 3 }}>
+            <Typography color='grey'>{`Welcome, let's orchestrate the first journey to Mars!`}</Typography>
+            <Button variant='contained' onClick={navigateToMissionCreation} sx={{ mb: { xs: 3, sm: 0, gap: 10 } }}>
+              Start Mission
+              <RocketLaunchIcon />
+            </Button>
+          </Box>
+        </Card>
+      )}
     </Box>
   );
 };

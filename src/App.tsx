@@ -20,8 +20,8 @@ const App: React.FC = () => {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
               <Typography
-                variant={isLargeScreen ? 'h2' : 'h3'}
-                sx={{ my: 5, textAlign: 'center', a: { color: 'white', textDecoration: 'none' } }}
+                variant={isLargeScreen ? 'h2' : 'h4'}
+                sx={{ my: { xs: 2.5, sm: 5 }, textAlign: 'center', a: { color: 'white', textDecoration: 'none' } }}
               >
                 <Link to='/'>Journey Orchestrator</Link>
               </Typography>
