@@ -9,6 +9,7 @@ import CrewDetailsStep from '@/components/MissionDetailsManagement/CrewDetailsSt
 import MissionDetailsStep from '@/components/MissionDetailsManagement/MissionDetailsStep';
 import { finalSchema, MissionForm, missionSchema } from '@/components/MissionDetailsManagement/schema';
 import { CrewMemberType } from '@/models/types/crewMemberType.type';
+import { EngineerJob } from '@/models/types/engineerJob.type';
 import { Mission } from '@/models/types/mission.type';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { missionActions } from '@/store/mission/MissionSlice';
@@ -85,9 +86,9 @@ const MissionDetailsManagement: React.FC = () => {
         crewMembers: [
           { type: 'Pilot', experience: +data.pilotExperience },
           ...data.engineers.map((engineer) => ({
-            ...engineer,
             type: 'Engineer' as CrewMemberType,
             experience: +engineer.experience,
+            job: engineer.job as EngineerJob,
           })),
           ...data.passengers.map((passenger) => ({
             type: 'Passenger' as CrewMemberType,

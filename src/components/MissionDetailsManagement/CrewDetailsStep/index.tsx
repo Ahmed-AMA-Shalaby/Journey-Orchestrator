@@ -86,7 +86,16 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, getV
         </Typography>
       </FormLabel>
       {engineerFields.map((field, index) => (
-        <Box key={field.id} sx={{ display: 'flex', gap: 2, mt: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
+        <Box
+          key={field.id}
+          sx={{
+            display: 'flex',
+            gap: 2,
+            mt: 2,
+            flexDirection: { xs: 'column', sm: 'row' },
+            alignItems: { xs: 'stretch', sm: 'flex-start' },
+          }}
+        >
           <Controller
             name={`engineers.${index}.experience`}
             control={control}
@@ -113,8 +122,8 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, getV
             control={control}
             render={({ field }) => (
               <FormControl fullWidth margin='none'>
-                <InputLabel>Job</InputLabel>
-                <Select {...field} label='Job' error={!!errors.engineers?.[index]?.job}>
+                <InputLabel id='engineer-job-select'>Job</InputLabel>
+                <Select {...field} labelId='engineer-job-select' label='Job' error={!!errors.engineers?.[index]?.job}>
                   {engineerJobs.map((job) => (
                     <MenuItem key={job} value={job}>
                       {job}
@@ -130,7 +139,7 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, getV
             )}
           />
           {isLargeScreen ? (
-            <IconButton color='error' onClick={() => removeEngineer(index)}>
+            <IconButton color='error' onClick={() => removeEngineer(index)} sx={{ mt: 1 }}>
               <RemoveCircle />
             </IconButton>
           ) : (
@@ -163,7 +172,16 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, getV
         </Typography>
       </FormLabel>
       {passengerFields.map((field, index) => (
-        <Box key={field.id} sx={{ display: 'flex', gap: 2, mt: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
+        <Box
+          key={field.id}
+          sx={{
+            display: 'flex',
+            gap: 2,
+            mt: 2,
+            flexDirection: { xs: 'column', sm: 'row' },
+            alignItems: { xs: 'stretch', sm: 'flex-start' },
+          }}
+        >
           <Controller
             name={`passengers.${index}.age`}
             control={control}
@@ -201,7 +219,7 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, getV
             )}
           />
           {isLargeScreen ? (
-            <IconButton color='error' onClick={() => removePassenger(index)}>
+            <IconButton color='error' onClick={() => removePassenger(index)} sx={{ mt: 1 }}>
               <RemoveCircle />
             </IconButton>
           ) : (

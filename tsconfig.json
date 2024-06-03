@@ -27,8 +27,10 @@
       "@/store/*": ["store/*"],
       "@/store": ["store"],
       "@/assets/*": ["assets/*"],
-      "@/utils": ["utils"]
-    }
+      "@/utils": ["utils"],
+      "@/tests/*": ["__tests__/*"]
+    },
+    "types": ["vitest/globals", "vite/client", "@testing-library/jest-dom"]
   },
   "include": ["src", "vite-env.d.ts", "vite.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]

@@ -46,8 +46,13 @@ const MissionDetailsStep: React.FC<MissionDetailsStepProps> = ({ control, errors
         control={control}
         render={({ field }) => (
           <FormControl fullWidth margin='none'>
-            <InputLabel>Destination</InputLabel>
-            <Select {...field} label='Destination' error={!!errors.missionDestination}>
+            <InputLabel id='mission-destination-select'>Destination</InputLabel>
+            <Select
+              {...field}
+              labelId='mission-destination-select'
+              label='Destination'
+              error={!!errors.missionDestination}
+            >
               {destinations.map((destination) => (
                 <MenuItem key={destination} value={destination}>
                   {destination}

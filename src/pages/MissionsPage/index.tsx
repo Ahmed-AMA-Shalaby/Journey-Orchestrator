@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import MissionsTable from '@/components/MissionsTable';
 import { useAppSelector } from '@/store/hooks';
 
-const MissionsListPage: React.FC = () => {
+const MissionsPage: React.FC = () => {
   const missions = useAppSelector((state) => state.mission.missions);
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('sm'));
@@ -42,4 +42,4 @@ const MissionsListPage: React.FC = () => {
   );
 };
 
-export default MissionsListPage;
+export default MissionsPage;

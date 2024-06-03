@@ -7,7 +7,7 @@ import MissionDetailsManagement from '@/components/MissionDetailsManagement';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { missionActions } from '@/store/mission/MissionSlice';
 
-const MissionManagmentPage: React.FC = () => {
+const MissionManagementPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const selectedMission = useAppSelector((state) => state.mission.selectedMission);
@@ -44,4 +44,4 @@ const MissionManagmentPage: React.FC = () => {
   );
 };
 
-export default MissionManagmentPage;
+export default MissionManagementPage;
