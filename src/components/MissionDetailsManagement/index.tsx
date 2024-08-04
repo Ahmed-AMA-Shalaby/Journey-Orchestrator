@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import CrewDetailsStep from '@/components/MissionDetailsManagement/CrewDetailsStep';
 import MissionDetailsStep from '@/components/MissionDetailsManagement/MissionDetailsStep';
 import { finalSchema, MissionForm, missionSchema } from '@/components/MissionDetailsManagement/schema';
+import useSx from '@/components/MissionDetailsManagement/styles';
 import { CrewMemberType } from '@/models/types/crewMemberType.type';
 import { EngineerJob } from '@/models/types/engineerJob.type';
 import { Mission } from '@/models/types/mission.type';
@@ -66,6 +67,7 @@ const MissionDetailsManagement: React.FC = () => {
   });
 
   const navigate = useNavigate();
+  const styles = useSx();
 
   useEffect(() => {
     if (selectedMission) {
@@ -111,10 +113,10 @@ const MissionDetailsManagement: React.FC = () => {
   };
 
   return (
-    <Card sx={{ p: 4, mb: 8 }}>
+    <Card sx={styles.card}>
       <Stepper
         activeStep={activeStep}
-        sx={{ m: 2 }}
+        sx={styles.stepper}
         orientation={isLargeScreen ? 'horizontal' : 'vertical'}
         alternativeLabel={isLargeScreen}
       >

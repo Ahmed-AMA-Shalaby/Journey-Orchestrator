@@ -6,30 +6,20 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
 import App from './App.tsx';
+import useSx from './styles';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Box
-        sx={{
-          '&:before': {
-            content: "''",
-            position: 'fixed',
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-            zIndex: -1,
-            backgroundImage: "url('/assets/background.jpg')",
-            backgroundSize: 'cover',
-            height: '100%',
-            filter: 'brightness(0.2) blur(4px)',
-            transform: 'scale(1.1)',
-          },
-        }}
-      >
-        <App />
-      </Box>
-    </BrowserRouter>
-  </React.StrictMode>,
-);
+const Root = (): React.ReactNode => {
+  const styles = useSx();
+
+  return (
+    <React.StrictMode>
+      <BrowserRouter>
+        <Box sx={styles.background}>
+          <App />
+        </Box>
+      </BrowserRouter>
+    </React.StrictMode>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')!).render(<Root />);

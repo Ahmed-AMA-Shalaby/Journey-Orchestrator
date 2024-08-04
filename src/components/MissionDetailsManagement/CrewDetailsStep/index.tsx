@@ -17,6 +17,7 @@ import {
 import { Control, Controller, FieldErrors, useFieldArray, UseFormGetValues } from 'react-hook-form';
 
 import engineerJobs from '@/assets/EngineerJobs.json';
+import useSx from '@/components/MissionDetailsManagement/CrewDetailsStep/styles';
 import { MissionForm } from '@/components/MissionDetailsManagement/schema';
 import { useAppSelector } from '@/store/hooks';
 
@@ -49,6 +50,7 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, getV
   const selectedMission = useAppSelector((state) => state.mission.selectedMission);
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('sm'));
+  const styles = useSx();
 
   return (
     <Box>
@@ -81,21 +83,12 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, getV
 
       {/* Engineers Section */}
       <FormLabel>
-        <Typography variant='h6' gutterBottom sx={{ mt: 4 }}>
+        <Typography variant='h6' gutterBottom sx={styles.sectionSeparator}>
           Engineers
         </Typography>
       </FormLabel>
       {engineerFields.map((field, index) => (
-        <Box
-          key={field.id}
-          sx={{
-            display: 'flex',
-            gap: 2,
-            mt: 2,
-            flexDirection: { xs: 'column', sm: 'row' },
-            alignItems: { xs: 'stretch', sm: 'flex-start' },
-          }}
-        >
+        <Box key={field.id} sx={styles.fieldsSeparator}>
           <Controller
             name={`engineers.${index}.experience`}
             control={control}
@@ -131,7 +124,7 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, getV
                   ))}
                 </Select>
                 {errors.engineers?.[index]?.job && (
-                  <Typography color='error' sx={{ fontSize: '0.75rem', mt: '3px', ml: '14px' }}>
+                  <Typography color='error' sx={styles.membersError}>
                     {errors.engineers?.[index]?.job?.message}
                   </Typography>
                 )}
@@ -139,7 +132,7 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, getV
             )}
           />
           {isLargeScreen ? (
-            <IconButton color='error' onClick={() => removeEngineer(index)} sx={{ mt: 1 }}>
+            <IconButton color='error' onClick={() => removeEngineer(index)} sx={styles.removeMemberIcon}>
               <RemoveCircle />
             </IconButton>
           ) : (
@@ -148,7 +141,7 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, getV
               color='error'
               onClick={() => removeEngineer(index)}
               startIcon={<RemoveCircle />}
-              sx={{ mt: 2 }}
+              sx={styles.addOrRemoveMemberButton}
             >
               Remove Engineer
             </Button>
@@ -160,28 +153,19 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, getV
         onClick={() => appendEngineer({ experience: '', job: '' })}
         fullWidth={!isLargeScreen}
         startIcon={<AddCircle />}
-        sx={{ mt: 2 }}
+        sx={styles.addOrRemoveMemberButton}
       >
         Add Engineer
       </Button>
 
       {/* Passengers Section */}
       <FormLabel>
-        <Typography variant='h6' gutterBottom sx={{ mt: 4 }}>
+        <Typography variant='h6' gutterBottom sx={styles.sectionSeparator}>
           Passengers
         </Typography>
       </FormLabel>
       {passengerFields.map((field, index) => (
-        <Box
-          key={field.id}
-          sx={{
-            display: 'flex',
-            gap: 2,
-            mt: 2,
-            flexDirection: { xs: 'column', sm: 'row' },
-            alignItems: { xs: 'stretch', sm: 'flex-start' },
-          }}
-        >
+        <Box key={field.id} sx={styles.fieldsSeparator}>
           <Controller
             name={`passengers.${index}.age`}
             control={control}
@@ -219,7 +203,7 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, getV
             )}
           />
           {isLargeScreen ? (
-            <IconButton color='error' onClick={() => removePassenger(index)} sx={{ mt: 1 }}>
+            <IconButton color='error' onClick={() => removePassenger(index)} sx={styles.removeMemberIcon}>
               <RemoveCircle />
             </IconButton>
           ) : (
@@ -228,7 +212,7 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, getV
               color='error'
               onClick={() => removePassenger(index)}
               startIcon={<RemoveCircle />}
-              sx={{ mt: 2 }}
+              sx={styles.addOrRemoveMemberButton}
             >
               Remove Passenger
             </Button>
@@ -236,7 +220,7 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, getV
         </Box>
       ))}
       {getValues('passengers').length === 0 && errors.passengers && (
-        <Typography color='error' sx={{ fontSize: '0.75rem', mt: '3px', ml: '14px' }}>
+        <Typography color='error' sx={styles.membersError}>
           {errors.passengers.message || errors.passengers.root?.message}
         </Typography>
       )}
@@ -245,15 +229,16 @@ const CrewDetailsStep: React.FC<CrewDetailsStepProps> = ({ control, errors, getV
         onClick={() => appendPassenger({ age: '', wealth: '' })}
         fullWidth={!isLargeScreen}
         startIcon={<AddCircle />}
-        sx={{ mt: 2 }}
+        sx={styles.addOrRemoveMemberButton}
       >
         Add Passenger
       </Button>
 
-      <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4, mt: 4 }}>
+      <Box sx={styles.stepperControls}>
         <Button variant='contained' onClick={stepBack}>
           Prev
         </Button>
+
         <Button variant='contained' color='success' type='submit'>
           {selectedMission ? 'Update' : 'Create'}
         </Button>

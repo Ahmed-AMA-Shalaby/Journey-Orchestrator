@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import MissionDetailsManagement from '@/components/MissionDetailsManagement';
+import useSx from '@/pages/MissionManagmentPage/styles';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { missionActions } from '@/store/mission/MissionSlice';
 
@@ -14,6 +15,7 @@ const MissionManagementPage: React.FC = () => {
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('sm'));
   const navigate = useNavigate();
+  const styles = useSx();
 
   const navigateToMisssions = (): void => {
     navigate('/missions');
@@ -29,12 +31,9 @@ const MissionManagementPage: React.FC = () => {
 
   return (
     <>
-      <Typography
-        variant={isLargeScreen ? 'h3' : 'h5'}
-        sx={{ display: 'flex', alignItems: 'center', my: { xs: 2.5, sm: 5 }, color: 'white' }}
-      >
+      <Typography variant={isLargeScreen ? 'h3' : 'h5'} sx={styles.backButtonWrapper}>
         <IconButton color='primary' onClick={navigateToMisssions}>
-          <ArrowBack sx={{ mr: 1 }} />
+          <ArrowBack sx={styles.backButtonIcon} />
         </IconButton>
         {selectedMission ? 'Configure Mission' : 'Initiate Mission'}
       </Typography>
