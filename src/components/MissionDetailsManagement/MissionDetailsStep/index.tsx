@@ -1,9 +1,10 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
-import { DatePicker, pickersCalendarHeaderClasses } from '@mui/x-date-pickers';
+import { DatePicker } from '@mui/x-date-pickers';
 import { useState } from 'react';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 
 import destinations from '@/assets/Destinations.json';
+import useSx from '@/components/MissionDetailsManagement/MissionDetailsStep/styles';
 import { MissionForm } from '@/components/MissionDetailsManagement/schema';
 
 interface MissionDetailsStepProps {
@@ -15,6 +16,7 @@ interface MissionDetailsStepProps {
 
 const MissionDetailsStep: React.FC<MissionDetailsStepProps> = ({ control, errors, activeStep, stepBack }) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const styles = useSx();
 
   const openDatePicker = (): void => {
     setIsDatePickerOpen(true);
@@ -60,7 +62,7 @@ const MissionDetailsStep: React.FC<MissionDetailsStepProps> = ({ control, errors
               ))}
             </Select>
             {errors.missionDestination && (
-              <Typography color='error' sx={{ fontSize: '0.75rem', mt: '3px', ml: '14px' }}>
+              <Typography color='error' sx={styles.missionDestinationError}>
                 {errors.missionDestination.message}
               </Typography>
             )}
@@ -87,26 +89,14 @@ const MissionDetailsStep: React.FC<MissionDetailsStepProps> = ({ control, errors
                 onClick: openDatePicker,
               },
               field: { clearable: true, format: 'MMMM DD, YYYY' },
-              calendarHeader: {
-                sx: {
-                  [`.${pickersCalendarHeaderClasses.label}`]: {
-                    color: 'rgba(0, 0, 0, 0.87)',
-                  },
-                  [`.${pickersCalendarHeaderClasses.switchViewIcon}`]: {
-                    color: 'rgba(0, 0, 0, 0.87)',
-                  },
-                  [`.${pickersCalendarHeaderClasses.labelContainer}`]: {
-                    color: 'rgba(0, 0, 0, 0.87)',
-                  },
-                },
-              },
+              calendarHeader: { sx: styles.calendarHeader },
             }}
             onChange={(date) => field.onChange(date)}
           />
         )}
       />
 
-      <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4, mt: 2 }}>
+      <Box sx={styles.stepperControls}>
         <Button variant='contained' disabled={activeStep === 0} onClick={stepBack}>
           Prev
         </Button>

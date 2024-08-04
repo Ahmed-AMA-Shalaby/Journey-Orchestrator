@@ -25,6 +25,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import FlightStatus from '@/components/MissionsTable/FlightStatus';
+import useSx from '@/components/MissionsTable/styles';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { missionActions } from '@/store/mission/MissionSlice';
 import { snackbarActions } from '@/store/snackbar/SnackbarSlice';
@@ -51,6 +52,7 @@ const MissionList: React.FC = () => {
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('md'));
   const [searchText, setSearchText] = useState('');
   const [filteredMissions, setFilteredMissions] = useState(missions);
+  const styles = useSx();
 
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
@@ -91,11 +93,31 @@ const MissionList: React.FC = () => {
     dispatch(snackbarActions.showSnackbar('Mission has been terminated!'));
   };
 
+  const NoMissionsCard = (): JSX.Element => (
+    <Card sx={styles.noMissionsCard}>
+      <Box sx={styles.noMissionsCardContent}>
+        <Typography color='grey'>
+          {missions.length !== 0
+            ? `Couldn't find the missions you're looking for...`
+            : `Welcome, let's orchestrate the first journey to Mars!`}
+        </Typography>
+        {missions.length !== 0 ? (
+          <Typography color='grey'>Try searching by another name!</Typography>
+        ) : (
+          <Button variant='contained' onClick={navigateToMissionCreation} sx={styles.startMissionButton}>
+            Start Mission
+            <RocketLaunchIcon />
+          </Button>
+        )}
+      </Box>
+    </Card>
+  );
+
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5, mb: 8 }}>
+    <Box sx={styles.wrapper}>
       {missions.length !== 0 ? (
         <>
-          <Card sx={{ px: 2, py: 1 }}>
+          <Card sx={styles.searchCard}>
             <TextField
               label='Search by mission name'
               value={searchText}
@@ -114,11 +136,11 @@ const MissionList: React.FC = () => {
           </Card>
 
           {filteredMissions.length !== 0 ? (
-            <Box sx={{ overflow: 'auto' }}>
-              <Box sx={{ width: '100%', display: 'table', tableLayout: 'fixed' }}>
+            <Box sx={styles.tableOverflow}>
+              <Box sx={styles.tableWrapper}>
                 <TableContainer component={Paper}>
                   <Table aria-label='missions-table'>
-                    <TableHead sx={{ backgroundColor: 'white' }}>
+                    <TableHead sx={styles.tableHead}>
                       <TableRow>
                         <TableCell>Name</TableCell>
 
@@ -135,16 +157,16 @@ const MissionList: React.FC = () => {
                     <TableBody>
                       {filteredMissions.map(({ id, name, destination, crewMembers, departureDate }) => (
                         <TableRow key={id}>
-                          <TableCell sx={{ textWrap: 'nowrap' }}>{name}</TableCell>
+                          <TableCell sx={styles.noWrap}>{name}</TableCell>
 
-                          <TableCell sx={{ textWrap: 'nowrap' }}>{destination}</TableCell>
+                          <TableCell sx={styles.noWrap}>{destination}</TableCell>
 
                           <TableCell>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <Box sx={styles.membersWrapper}>
                               {crewMembers.length}
                               <Tooltip
                                 title={
-                                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                  <Box sx={styles.tooltip}>
                                     <Typography>Crew Overview:</Typography>
                                     <Box>
                                       <Typography>
@@ -168,15 +190,12 @@ const MissionList: React.FC = () => {
                             </Box>
                           </TableCell>
 
-                          <TableCell sx={{ textWrap: 'nowrap' }}>
-                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                          <TableCell sx={styles.noWrap}>
+                            <Box sx={styles.departureWrapper}>
                               {dayjs(departureDate).format('MMMM DD, YYYY')}
                               <Typography
-                                sx={{
-                                  fontSize: '0.75rem',
-                                  fontStyle: 'italic',
-                                  color: `${hasDeparted(departureDate) ? 'red' : 'grey'}`,
-                                }}
+                                color={hasDeparted(departureDate) ? 'red' : 'grey'}
+                                sx={styles.departureStatus}
                               >
                                 <FlightStatus departureDate={departureDate} />
                               </Typography>
@@ -184,7 +203,7 @@ const MissionList: React.FC = () => {
                           </TableCell>
 
                           <TableCell>
-                            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4 }}>
+                            <Box sx={styles.actionsWrapper}>
                               {!hasDeparted(departureDate) && (
                                 <>
                                   <Button variant='contained' fullWidth onClick={() => navigateToMission(id)}>
@@ -205,24 +224,11 @@ const MissionList: React.FC = () => {
               </Box>
             </Box>
           ) : (
-            <Card sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: { xs: 4, sm: 10 } }}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 3 }}>
-                <Typography color='grey'>{`Couldn't find the missions you're looking for...`}</Typography>
-                <Typography color='grey'>Try searching by another name!</Typography>
-              </Box>
-            </Card>
+            <NoMissionsCard />
           )}
         </>
       ) : (
-        <Card sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: { xs: 4, sm: 10 } }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 3 }}>
-            <Typography color='grey'>{`Welcome, let's orchestrate the first journey to Mars!`}</Typography>
-            <Button variant='contained' onClick={navigateToMissionCreation} sx={{ mb: { xs: 3, sm: 0, gap: 10 } }}>
-              Start Mission
-              <RocketLaunchIcon />
-            </Button>
-          </Box>
-        </Card>
+        <NoMissionsCard />
       )}
     </Box>
   );

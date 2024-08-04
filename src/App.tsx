@@ -8,21 +8,20 @@ import AppSnackbar from '@/components/AppSnackbar';
 import store from '@/store';
 
 import AppRouter from './router';
+import useSx from './styles';
 import { theme } from './theme';
 
 const App: React.FC = () => {
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('sm'));
+  const styles = useSx();
 
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <Container>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-              <Typography
-                variant={isLargeScreen ? 'h2' : 'h4'}
-                sx={{ my: { xs: 2.5, sm: 5 }, textAlign: 'center', a: { color: 'white', textDecoration: 'none' } }}
-              >
+            <Box sx={styles.titleWrapper}>
+              <Typography variant={isLargeScreen ? 'h2' : 'h4'} sx={styles.title}>
                 <Link to='/'>Journey Orchestrator</Link>
               </Typography>
             </Box>
